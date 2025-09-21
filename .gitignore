@@ -1,0 +1,31 @@
+node_modules/
+npm-debu.log*
+pnpm-lock.yaml
+yarn.lock
+#build
+dist/
+build/
+.out/
+.tmp/
+tmp/
+coverage/
+# Angular / Vite / Analog
+.angular/
+.hmr/
+.vite/
+*.local
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Env y claves
+.env
+.env.*
+!.env.example
+
+# Supabase (si generas tipos/local)
+supabase/.temp/
+supabase/seed.sql
+supabase/.branches
