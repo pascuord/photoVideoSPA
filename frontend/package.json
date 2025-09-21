@@ -10,6 +10,7 @@
     "dev": "vite",
     "start": "npm run dev",
     "build": "vite build",
+    "postbuild": "node -e \"const fs=require('fs');const p='dist/analog/public';if(fs.existsSync(p)){fs.cpSync(p,'public',{recursive:true});}else{const p2='dist';if(fs.existsSync(p2)){fs.cpSync(p2,'public',{recursive:true});}}\"",
     "watch": "vite build --watch",
     "test": "vitest",
     "preview": "node dist/analog/server/index.mjs"
