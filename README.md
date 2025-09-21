@@ -12,27 +12,7 @@
 
 ## ✨ Demo
 
-- **Live**: <!-- Pega aquí tu URL de Vercel/Netlify/Railway → --> `https://tu-dominio.dev`  
-- **Video corto (opcional)**: `https://youtu.be/xxx`
-
----
-
-## 📸 Capturas
-
-> Arrastra aquí imágenes o GIFs mostrando:
-- Home con **Hero Carousel** + **Galería** (tilt, shimmer, blur-up).
-- Página **Blog** (listado + detalle, media enlazado).
-- **Modal de login** con *magic link* y **pared suave** (soft-wall).
-- Flujo **“Like diferido”** (guardado en local y ejecución tras login).
-- Animación **confetti** al dar like (Lottie con fallback a canvas-confetti).
-
-```
-/docs/screenshots/01-home.png
-/docs/screenshots/02-gallery.png
-/docs/screenshots/03-blog-list.png
-/docs/screenshots/04-blog-detail.png
-/docs/screenshots/05-login-modal.png
-```
+- **Live**: <!-- Pega aquí tu URL de Vercel/Netlify/Railway → --> `https://tu-dominio.dev`  (Pendiente)
 
 ---
 
