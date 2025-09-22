@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import cors, { CorsOptionsDelegate } from 'cors';
+import cors, { CorsOptionsDelegate, CorsRequest } from 'cors';
 import dotenv from 'dotenv';
 
 import media from './routes/media';
@@ -28,8 +28,12 @@ const useCredentials = String(process.env.CORS_CREDENTIALS ?? 'false') === 'true
 // Permite cualquier subdominio *.vercel.app (previews incluidas)
 const vercelHostRe = /\.vercel\.app$/;
 
-const corsDelegate: CorsOptionsDelegate = (req, cb) => {
-  const origin = req.header('Origin') || '';
+const corsDelegate: CorsOptionsDelegate<CorsRequest> = (req, cb) => {
+  // origin puede ser string | string[] | undefined
+  const rawOrigin = (req.headers?.origin ?? '') as string | string[];
+  const origin =
+    Array.isArray(rawOrigin) ? (rawOrigin[0] ?? '') : (rawOrigin || '');
+
   let isAllowed = false;
 
   if (!origin) {
@@ -39,14 +43,13 @@ const corsDelegate: CorsOptionsDelegate = (req, cb) => {
     try {
       const url = new URL(origin);
       isAllowed =
-        allowedOrigins.includes(origin) || // lista blanca exacta
+        allowedOrigins.includes(origin) || // lista blanca exacta (tal cual en env)
         vercelHostRe.test(url.hostname);   // *.vercel.app
     } catch {
       isAllowed = false;
     }
   }
 
-  // Log útil en desarrollo
   if (process.env.NODE_ENV !== 'production') {
     console.log('[CORS]', { origin, isAllowed, allowedOrigins });
   }
