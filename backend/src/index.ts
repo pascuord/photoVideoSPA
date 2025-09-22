@@ -1,9 +1,10 @@
-import 'dotenv/config'; // o: import dotenv from 'dotenv'; dotenv.config();
+import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptionsDelegate } from 'cors';
+import dotenv from 'dotenv';
+
 import media from './routes/media';
 import blog from './routes/blog';
-import dotenv from 'dotenv';
 import stats from './routes/stats';
 import likes from './routes/likes';
 import comments from './routes/comments';
@@ -11,50 +12,79 @@ import shares from './routes/shares';
 import { requireUser } from './middleware/auth';
 
 dotenv.config();
+
 const app = express();
 const PORT = Number(process.env.PORT ?? 3000);
 
-// Parseo robusto de orígenes
+// Orígenes explícitos (separados por coma) desde env
 const allowedOrigins: string[] = (process.env.FRONTEND_ORIGINS ?? '')
   .split(',')
   .map(s => s.trim())
   .filter(Boolean);
 
-// Si usarás cookies/sesión entre front y back
+// ¿Cookies/sesión cross-site?
 const useCredentials = String(process.env.CORS_CREDENTIALS ?? 'false') === 'true';
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Permite llamadas sin origin (curl, SSR) y las que estén en la lista
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
+// Permite cualquier subdominio *.vercel.app (previews incluidas)
+const vercelHostRe = /\.vercel\.app$/;
+
+const corsDelegate: CorsOptionsDelegate = (req, cb) => {
+  const origin = req.header('Origin') || '';
+  let isAllowed = false;
+
+  if (!origin) {
+    // curl, SSR, health checks… sin cabecera Origin
+    isAllowed = true;
+  } else {
+    try {
+      const url = new URL(origin);
+      isAllowed =
+        allowedOrigins.includes(origin) || // lista blanca exacta
+        vercelHostRe.test(url.hostname);   // *.vercel.app
+    } catch {
+      isAllowed = false;
     }
-    return callback(new Error(`Origen no permitido por CORS: ${origin}`), false);
-  },
-  credentials: useCredentials,
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-}));
+  }
+
+  // Log útil en desarrollo
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[CORS]', { origin, isAllowed, allowedOrigins });
+  }
+
+  cb(null, {
+    origin: isAllowed, // true => refleja el Origin permitido
+    credentials: useCredentials,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+};
+
+// ⬇️ CORS SIEMPRE ANTES DE LAS RUTAS
+app.use(cors(corsDelegate));
+// Responder preflights
+app.options('*', cors(corsDelegate));
 
 app.use(express.json());
 
-// (opcional) ruta de salud
+// Health
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, ts: Date.now(), allowedOrigins, credentials: useCredentials });
 });
 
+// Rutas públicas
 app.use('/api', media);
 app.use('/api', blog);
 app.use('/api', stats);
 app.use('/api', comments);
 
-// Protegidos (usa requireUser directamente)
+// Rutas protegidas
 app.use('/api', requireUser, likes);
 
-// Shares no requiere user (puedes proteger si quieres)
+// Shares (público; protégelo si lo necesitas)
 app.use('/api', shares);
 
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
-  console.log('CORS orígenes permitidos:', allowedOrigins);
+  console.log('CORS orígenes permitidos (env):', allowedOrigins);
+  console.log('CORS allow *.vercel.app:', true);
 });
