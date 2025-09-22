@@ -65,7 +65,7 @@ const corsDelegate: CorsOptionsDelegate<CorsRequest> = (req, cb) => {
 // ⬇️ CORS SIEMPRE ANTES DE LAS RUTAS
 app.use(cors(corsDelegate));
 // Responder preflights
-app.options('*', cors(corsDelegate));
+app.options('(.*)', cors(corsDelegate));
 
 app.use(express.json());
 
