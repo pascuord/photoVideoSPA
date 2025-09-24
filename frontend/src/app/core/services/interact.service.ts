@@ -1,6 +1,6 @@
-// src/app/core/services/interact.service.ts
 import { Injectable } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
+import { apiUrl } from '../api-url'; // 👈 NUEVO
 
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL || '<YOUR_SUPABASE_URL>';
 const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '<YOUR_SUPABASE_ANON_KEY>';
@@ -10,17 +10,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 export type StatsDto = { likes: number; comments: number; shares: number; likedByMe?: boolean };
-
-const API_BASE: string | undefined = (import.meta as any).env?.VITE_API_BASE_URL?.trim();
-
-/** Construye la URL del API:
- *  - PROD:   https://tu-backend.com/api/...
- *  - DEV:    /backend/...  (Vite -> proxy -> http://localhost:3000/api/...)
- */
-function apiUrl(path: string) {
-  if (API_BASE) return `${API_BASE.replace(/\/$/, '')}/api${path}`;
-  return `/backend${path}`;
-}
 
 @Injectable({ providedIn: 'root' })
 export class InteractService {

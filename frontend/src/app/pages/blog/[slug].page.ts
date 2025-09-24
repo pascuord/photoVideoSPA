@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { apiUrl } from '../../core/api-url'; // 👈 NUEVO
 
 type Media = { type: 'image'|'video'; url: string; thumbnailUrl?: string; watermark_text?: string; title?: string; slug: string; };
 type BlogPost = { slug: string; title: string; body: string; coverUrl?: string; linkedMedia?: Media; created_at: string; };
@@ -20,7 +21,6 @@ type BlogPost = { slug: string; title: string; body: string; coverUrl?: string; 
       <img [src]="post?.coverUrl" [alt]="post?.title" class="w-full h-auto select-none pointer-events-none" draggable="false"/>
     </div>
 
-    <!-- Linked media preview -->
     <div *ngIf="post?.linkedMedia" class="mb-6">
       <div class="text-sm font-semibold mb-2">Referenced media</div>
       <div class="relative rounded-xl overflow-hidden bg-black/5">
@@ -28,8 +28,7 @@ type BlogPost = { slug: string; title: string; body: string; coverUrl?: string; 
           <img *ngSwitchCase="'image'" [src]="post!.linkedMedia!.thumbnailUrl || post!.linkedMedia!.url"
                [alt]="post!.linkedMedia!.title || 'linked image'"
                class="w-full h-auto select-none pointer-events-none" draggable="false" />
-          <video *ngSwitchCase="'video'" [src]="post!.linkedMedia!.url" controls
-                 class="w-full h-auto" draggable="false"></video>
+          <video *ngSwitchCase="'video'" [src]="post!.linkedMedia!.url" controls class="w-full h-auto" draggable="false"></video>
         </ng-container>
         <div class="pointer-events-none absolute inset-0 grid place-items-center opacity-25">
           <span class="text-xl font-bold -rotate-12">{{ post!.linkedMedia!.watermark_text || '© Tu Marca' }}</span>
@@ -37,7 +36,6 @@ type BlogPost = { slug: string; title: string; body: string; coverUrl?: string; 
       </div>
     </div>
 
-    <!-- Body (texto simple). Si guardas Markdown/HTML, añadimos render más adelante -->
     <div class="prose max-w-none">
       <p style="white-space: pre-wrap">{{ post?.body }}</p>
     </div>
@@ -56,7 +54,7 @@ export default class BlogDetailPage implements OnInit {
     const slug = this.route.snapshot.paramMap.get('slug');
     if (!slug) return;
     console.log('Loading blog post ', slug);
-    this.post = await firstValueFrom(this.http.get<BlogPost>(`/backend/blog/${slug}`));
+    this.post = await firstValueFrom(this.http.get<BlogPost>(apiUrl(`/blog/${slug}`))); // 👈
     console.log('Loaded post ', this.post);
   }
 }
