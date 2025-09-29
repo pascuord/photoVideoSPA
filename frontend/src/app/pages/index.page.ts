@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import GalleryPage from './gallery.page';
-import { HeroCarouselComponent } from "../shared/components/hero-carousel.component";
+import { HeroCarouselComponent } from '../shared/components/hero-carousel.component';
 
 @Component({
   selector: 'app-home',
@@ -14,5 +14,4 @@ import { HeroCarouselComponent } from "../shared/components/hero-carousel.compon
     </ng-container>
   `,
 })
-export default class HomeComponent {
-}
+export default class HomeComponent {}

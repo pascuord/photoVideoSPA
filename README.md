@@ -1,6 +1,6 @@
 # Photo/Video SPA — Portfolio
 
-> Una **Single Page App** para mostrar galería de fotos/vídeos con blog, “likes” con animaciones, login por *magic link* (Supabase), y backend Express. Optimizada para portfolio: código limpio, UX moderna y buen rendimiento.
+> Una **Single Page App** para mostrar galería de fotos/vídeos con blog, “likes” con animaciones, login por _magic link_ (Supabase), y backend Express. Optimizada para portfolio: código limpio, UX moderna y buen rendimiento.
 
 [![Angular](https://img.shields.io/badge/Angular-17+-DD0031?logo=angular&logoColor=white)](https://angular.dev/)
 [![Vite](https://img.shields.io/badge/Vite-5+-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -12,13 +12,14 @@
 
 ## ✨ Demo
 
-- **Live**: <!-- Pega aquí tu URL de Vercel/Netlify/Railway → --> `https://tu-dominio.dev`  (Pendiente)
+- **Live**: <!-- Pega aquí tu URL de Vercel/Netlify/Railway → --> `https://tu-dominio.dev` (Pendiente)
 
 ---
 
 ## 🧱 Stack & Arquitectura
 
 **Frontend**
+
 - Angular 17+ (standalone components, signals, @defer, SSR friendly).
 - Vite + AnalogJS Router (file-based routing).
 - TailwindCSS + utilidades (focus-ring, shadows, glass).
@@ -26,11 +27,13 @@
 - Directivas UX: tilt 3D, anti-download, auto-animate.
 
 **Backend**
+
 - Node.js + Express.
 - Supabase (Auth, Storage, Postgres).
 - Endpoints REST bajo `/api`.
 
 **Estructura (resumen)**
+
 ```
 frontend/
   src/app/
@@ -70,10 +73,10 @@ backend/
 
 ## 🔐 Autenticación
 
-- **Supabase Auth** con *magic link* (email).
+- **Supabase Auth** con _magic link_ (email).
 - **Whitelist** de emails: solo correos permitidos reciben el enlace.(Pendiente)
-- Soft-wall: si no hay sesión y haces “like”, se abre el **modal**.  
-  - Si cierras el modal → **fallback** a `/auth?redirect=...`.  
+- Soft-wall: si no hay sesión y haces “like”, se abre el **modal**.
+  - Si cierras el modal → **fallback** a `/auth?redirect=...`.
   - Si envías email → al completar el login, el **like diferido** se ejecuta y vuelves donde estabas.
 
 ---
@@ -105,7 +108,7 @@ backend/
   Listado y detalle de posts; cada post puede incluir `linkedMedia`.
 - `GET /api/stats/:contentType/:contentId`  
   Likes, comments, shares (y `likedByMe` si hay token).
-- `POST /api/likes` *(auth requerida)*  
+- `POST /api/likes` _(auth requerida)_  
   Alterna like/unlike para el usuario.
 
 ---
@@ -113,6 +116,7 @@ backend/
 ## ⚙️ Variables de entorno
 
 ### Frontend `.env`
+
 ```bash
 VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
@@ -121,6 +125,7 @@ VITE_SUPABASE_ANON_KEY=...
 ```
 
 ### Backend `.env`
+
 ```bash
 PORT=3000
 SUPABASE_URL=...
@@ -158,6 +163,7 @@ pnpm test         # unit tests (vitest + jsdom)
 ```
 
 **Backend**
+
 ```bash
 pnpm dev          # ts-node-dev
 pnpm build        # tsc
@@ -169,7 +175,7 @@ pnpm start        # node dist/index.js
 ## ✅ Checklist de calidad
 
 - **Accesibilidad**: `aria-*`, foco visible (`focus-ring`), contraste, labels correctos.
-- **Rendimiento**: imágenes lazy, `blur-up`, `content-visibility`, *defer chunks*.
+- **Rendimiento**: imágenes lazy, `blur-up`, `content-visibility`, _defer chunks_.
 - **UX**: feedback en botones (pending), toasts de error, transiciones suaves.
 - **SSR-friendly**: `isPlatformBrowser` para APIs de DOM/Storage.
 - **Seguridad**: endpoints sensibles requieren token; likes verificados por server.
@@ -178,23 +184,23 @@ pnpm start        # node dist/index.js
 
 ## 🧪 Casos de prueba recomendados
 
-- **Galería**  
-  - Render de grid, *skeleton* en carga, manejo de errores.  
-  - Imágenes con/ sin `thumbnail_path`.  
+- **Galería**
+  - Render de grid, _skeleton_ en carga, manejo de errores.
+  - Imágenes con/ sin `thumbnail_path`.
   - Card con/ sin post → solo link cuando `hasPost = true`.
-- **Blog**  
-  - Lista + paginación (opcional).  
-  - Detalle por `slug`, media enlazado.  
+- **Blog**
+  - Lista + paginación (opcional).
+  - Detalle por `slug`, media enlazado.
   - 404 cuando no existe.
-- **Auth**  
-  - Whitelist: email permitido recibe *magic link*, no permitido → 403.  
-  - Redirección `redirect` tras login.  
+- **Auth**
+  - Whitelist: email permitido recibe _magic link_, no permitido → 403.
+  - Redirección `redirect` tras login.
   - Ejecución de **like diferido** tras login.
-- **Likes**  
-  - Optimistic UI, rollback en error.  
+- **Likes**
+  - Optimistic UI, rollback en error.
   - `likedByMe` coherente con backend.
-- **Confetti/Animación**  
-  - Lottie en navegadores soportados; fallback a `canvas-confetti`.  
+- **Confetti/Animación**
+  - Lottie en navegadores soportados; fallback a `canvas-confetti`.
   - Respeta `prefers-reduced-motion`.
 
 ---
@@ -219,6 +225,6 @@ MIT © **pascuord**
 
 ## 📬 Contacto
 
-- Web/Portfolio: `https://pascualordinanasoler.framer.website/`  
-- X/Instagram: `@pascuord`  
+- Web/Portfolio: `https://pascualordinanasoler.framer.website/`
+- X/Instagram: `@pascuord`
 - Email: `pascuord@gmail.com`

@@ -37,10 +37,19 @@ export class AuthService {
       let display_name = s.user.user_metadata?.['name'] ?? null;
       let avatar_url = s.user.user_metadata?.['avatar_url'] ?? null;
       try {
-        const { data: p } = await supabase.from('profiles').select('display_name, avatar_url').eq('id', s.user.id).single();
-        if (p) { display_name = p.display_name ?? display_name; avatar_url = p.avatar_url ?? avatar_url; }
-      } catch { /* ignore */ }
-      this._user.set({ id: s.user.id, email: s.user.email ?? undefined, display_name, avatar_url });
+        const { data: p } = await supabase
+          .from('profiles')
+          .select('display_name, avatar_url')
+          .eq('id', s.user.id)
+          .single();
+        if (p) {
+          display_name = p.display_name ?? display_name;
+          avatar_url = p.avatar_url ?? avatar_url;
+        }
+      } catch {
+        /* ignore */
+      }
+      this._user.set({ id: s.user.id, email: s.user.email ?? '', display_name, avatar_url });
     } else {
       this._user.set(null);
     }

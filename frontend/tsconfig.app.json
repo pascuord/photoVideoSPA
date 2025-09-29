@@ -1,18 +1,12 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "composite": true,
-        "outDir": "./out-tsc/app",
-        "types": []
-    },
-    "files": [],
-    "include": [
-        "src/main.ts",
-        "src/main.server.ts",
-        "src/app/**/*.ts"
-    ],
-    "exclude": [
-        "src/test.ts",
-        "src/**/*.spec.ts"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "useDefineForClassFields": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }

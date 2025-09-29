@@ -9,11 +9,12 @@ const router = Router();
 router.get('/comments', async (req, res) => {
   try {
     const contentType = String(req.query.contentType || '');
-    const contentId   = String(req.query.contentId || '');
-    const limitNum    = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
-    const cursorB64   = req.query.cursor ? String(req.query.cursor) : null;
+    const contentId = String(req.query.contentId || '');
+    const limitNum = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+    const cursorB64 = req.query.cursor ? String(req.query.cursor) : null;
 
-    if (!isValidContentType(contentType)) return res.status(400).json({ error: 'Invalid contentType' });
+    if (!isValidContentType(contentType))
+      return res.status(400).json({ error: 'Invalid contentType' });
     if (!isUuid(contentId)) return res.status(400).json({ error: 'Invalid contentId' });
 
     let createdBefore: string | null = null;
@@ -21,7 +22,9 @@ router.get('/comments', async (req, res) => {
       try {
         createdBefore = Buffer.from(cursorB64, 'base64').toString('utf8');
         if (!/\d{4}-\d{2}-\d{2}T/.test(createdBefore)) createdBefore = null;
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
 
     let q = supabase
@@ -40,9 +43,16 @@ router.get('/comments', async (req, res) => {
     const rows = data ?? [];
     const hasMore = rows.length > limitNum;
     const items = hasMore ? rows.slice(0, limitNum) : rows;
-    const nextCursor = hasMore
-      ? Buffer.from(String(items[items.length - 1].created_at)).toString('base64')
-      : null;
+    // después (seguro ante arrays vacíos y con tipado estricto)
+    const lastItem = items.length ? items[items.length - 1] : undefined;
+
+    // Si created_at viene como Date o string ISO, lo normalizamos a string
+    const lastCreatedAt =
+      lastItem?.created_at instanceof Date
+        ? lastItem.created_at.toISOString()
+        : (lastItem?.created_at ?? null);
+
+    const nextCursor = lastCreatedAt ? Buffer.from(lastCreatedAt).toString('base64') : null;
 
     res.setHeader('Cache-Control', 'public, max-age=10, stale-while-revalidate=30');
     return res.json({ items, nextCursor });
@@ -59,7 +69,8 @@ router.post('/comments', requireUser, async (req, res) => {
     const supabaseUser = auth.supabaseUser;
 
     const { contentType, contentId, body } = req.body || {};
-    if (!isValidContentType(contentType)) return res.status(400).json({ error: 'Invalid contentType' });
+    if (!isValidContentType(contentType))
+      return res.status(400).json({ error: 'Invalid contentType' });
     if (!isUuid(contentId)) return res.status(400).json({ error: 'Invalid contentId' });
     if (!body || typeof body !== 'string' || body.trim().length === 0) {
       return res.status(400).json({ error: 'Empty comment' });

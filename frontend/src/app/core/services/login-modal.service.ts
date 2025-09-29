@@ -5,6 +5,7 @@ import {
   Injectable,
   createComponent,
   Inject,
+  inject,
 } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
@@ -13,15 +14,15 @@ import { LoginModalComponent } from '../../shared/components/login-modal.compone
 
 @Injectable({ providedIn: 'root' })
 export class LoginModalService {
+  private readonly doc = inject(DOCUMENT);
+  private readonly pid = inject(PLATFORM_ID);
+
   constructor(
     private appRef: ApplicationRef,
     private env: EnvironmentInjector,
-    @Inject(DOCUMENT) private doc: Document,
-    @Inject(PLATFORM_ID) private pid: Object,
   ) {}
 
   open(): Promise<'closed' | 'email-sent'> {
-    console.log('[LoginModalService] open()');
     // En SSR no hacemos nada
     if (!isPlatformBrowser(this.pid)) {
       return Promise.resolve('closed');

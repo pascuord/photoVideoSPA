@@ -4,12 +4,44 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "npm run type-check:frontend && npm run type-check:backend",
+    "type-check:frontend": "tsc -p frontend/tsconfig.app.json --noEmit",
+    "type-check:backend": "tsc -p backend/tsconfig.json --noEmit",
+    "type-check:frontend:spec": "tsc -p frontend/tsconfig.spec.json --noEmit",
+    "prepare": "husky",
+    "commitlint": "commitlint --from=HEAD~1",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,md,css,scss,html}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "supabase": "^2.40.7"
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@eslint/js": "^9.36.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.1",
+    "prettier": "^3.6.2",
+    "supabase": "^2.40.7",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   }
 }

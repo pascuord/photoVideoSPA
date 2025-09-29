@@ -17,25 +17,35 @@ async function getUidFromAuthHeader(req: any): Promise<string | null> {
 router.get('/stats/:contentType/:contentId', async (req, res) => {
   try {
     const { contentType, contentId } = req.params;
-    if (!isValidContentType(contentType)) return res.status(400).json({ error: 'Invalid contentType' });
+    if (!isValidContentType(contentType))
+      return res.status(400).json({ error: 'Invalid contentType' });
     if (!isUuid(contentId)) return res.status(400).json({ error: 'Invalid contentId' });
 
     const uidPromise = getUidFromAuthHeader(req);
 
     const likesHeadPromise = supabase
-      .from('likes').select('id', { count: 'exact', head: true })
-      .eq('content_type', contentType).eq('content_id', contentId);
+      .from('likes')
+      .select('id', { count: 'exact', head: true })
+      .eq('content_type', contentType)
+      .eq('content_id', contentId);
 
     const commentsHeadPromise = supabase
-      .from('comments').select('id', { count: 'exact', head: true })
-      .eq('content_type', contentType).eq('content_id', contentId);
+      .from('comments')
+      .select('id', { count: 'exact', head: true })
+      .eq('content_type', contentType)
+      .eq('content_id', contentId);
 
     const sharesRowsPromise = supabase
-      .from('share_stats').select('count')
-      .eq('content_type', contentType).eq('content_id', contentId);
+      .from('share_stats')
+      .select('count')
+      .eq('content_type', contentType)
+      .eq('content_id', contentId);
 
     const [likesHead, commentsHead, sharesRows, uid] = await Promise.all([
-      likesHeadPromise, commentsHeadPromise, sharesRowsPromise, uidPromise,
+      likesHeadPromise,
+      commentsHeadPromise,
+      sharesRowsPromise,
+      uidPromise,
     ]);
 
     if (likesHead.error) throw likesHead.error;
@@ -44,12 +54,16 @@ router.get('/stats/:contentType/:contentId', async (req, res) => {
 
     const likes = likesHead.count ?? 0;
     const comments = commentsHead.count ?? 0;
-    const shares = (sharesRows.data ?? []).reduce((acc: number, r: any) => acc + (r?.count ?? 0), 0);
+    const shares = (sharesRows.data ?? []).reduce(
+      (acc: number, r: any) => acc + (r?.count ?? 0),
+      0,
+    );
 
     let likedByMe: boolean | undefined = undefined;
     if (uid) {
       const { data: meLike, error: meErr } = await supabase
-        .from('likes').select('id')
+        .from('likes')
+        .select('id')
         .eq('user_id', uid)
         .eq('content_type', contentType)
         .eq('content_id', contentId)
@@ -60,8 +74,11 @@ router.get('/stats/:contentType/:contentId', async (req, res) => {
     }
 
     res.setHeader('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
-    return res.json(likedByMe === undefined ? { likes, comments, shares }
-                                            : { likes, comments, shares, likedByMe });
+    return res.json(
+      likedByMe === undefined
+        ? { likes, comments, shares }
+        : { likes, comments, shares, likedByMe },
+    );
   } catch (e: any) {
     return res.status(500).json({ error: e.message });
   }

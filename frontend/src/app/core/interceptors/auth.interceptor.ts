@@ -9,8 +9,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return from(supabase.auth.getSession()).pipe(
     switchMap(({ data }) => {
       const token = data.session?.access_token;
-      const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` }}) : req;
+      const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
       return next(authReq);
-    })
+    }),
   );
 };

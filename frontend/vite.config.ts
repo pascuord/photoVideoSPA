@@ -13,10 +13,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     mainFields: ['browser', 'module', 'main'],
   },
-  plugins: [
-    analog(),
-    tailwindcss(),
-  ],
+  plugins: [analog(), tailwindcss()],
   server: {
     proxy: {
       '/backend': {
@@ -40,10 +37,10 @@ export default defineConfig(({ mode }) => ({
     include: ['**/*.spec.ts'],
     reporters: ['default'],
   },
-   // 🔧 CAMBIO: define para runtime
+  // 🔧 CAMBIO: define para runtime
   define: {
     global: 'globalThis',
-    'process.env': {},                 // evita fallos con process.env
+    'process.env': {}, // evita fallos con process.env
     'import.meta.vitest': mode !== 'production',
   },
 }));

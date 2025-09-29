@@ -2,26 +2,31 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./out-tsc", // Puedes dejarlo así; con --noEmit no se usará
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
     "sourceMap": true,
-    "declaration": true,
+
+    "declaration": false, // ⬅️ IMPORTANTE
+    "composite": false, // ⬅️ IMPORTANTE
+    "incremental": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "ESNext",
     "lib": ["ES2022", "dom"],
     "useDefineForClassFields": false,
-    "skipLibCheck": true,
-    "composite": true
+    "useUnknownInCatchVariables": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -29,9 +34,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "references": [
-    { "path": "tsconfig.spec.json" },
-    { "path": "tsconfig.app.json" }
-
-  ]
+  "include": ["src/**/*.ts"], // ⬅️ Limitar a código fuente
+  "exclude": ["node_modules", "dist", "out-tsc"] // ⬅️ Excluir generados
 }

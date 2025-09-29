@@ -19,7 +19,7 @@ const PORT = Number(process.env.PORT ?? 3000);
 // Orígenes explícitos (separados por coma) desde env
 const allowedOrigins: string[] = (process.env.FRONTEND_ORIGINS ?? '')
   .split(',')
-  .map(s => s.trim())
+  .map((s) => s.trim())
   .filter(Boolean);
 
 // ¿Cookies/sesión cross-site?
@@ -31,8 +31,7 @@ const vercelHostRe = /\.vercel\.app$/;
 const corsDelegate: CorsOptionsDelegate<CorsRequest> = (req, cb) => {
   // origin puede ser string | string[] | undefined
   const rawOrigin = (req.headers?.origin ?? '') as string | string[];
-  const origin =
-    Array.isArray(rawOrigin) ? (rawOrigin[0] ?? '') : (rawOrigin || '');
+  const origin = Array.isArray(rawOrigin) ? (rawOrigin[0] ?? '') : rawOrigin || '';
 
   let isAllowed = false;
 
@@ -44,7 +43,7 @@ const corsDelegate: CorsOptionsDelegate<CorsRequest> = (req, cb) => {
       const url = new URL(origin);
       isAllowed =
         allowedOrigins.includes(origin) || // lista blanca exacta (tal cual en env)
-        vercelHostRe.test(url.hostname);   // *.vercel.app
+        vercelHostRe.test(url.hostname); // *.vercel.app
     } catch {
       isAllowed = false;
     }

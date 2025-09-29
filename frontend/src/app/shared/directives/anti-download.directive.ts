@@ -12,7 +12,10 @@ export class AntiDownloadDirective implements OnInit {
   /** Pausar los bloqueos si hay un modal abierto (role=dialog aria-modal="true") */
   @Input() suspendWhenDialogOpen = true;
 
-  constructor(private el: ElementRef, private r2: Renderer2) {}
+  constructor(
+    private el: ElementRef,
+    private r2: Renderer2,
+  ) {}
 
   ngOnInit() {
     // Evita arrastrar contenido
@@ -59,7 +62,7 @@ export class AntiDownloadDirective implements OnInit {
     }
 
     // 2) No bloquear cuando el foco está en inputs/areas o contenteditable
-    const t = (e.target as HTMLElement | null);
+    const t = e.target as HTMLElement | null;
     if (t) {
       const tag = t.tagName?.toLowerCase?.() || '';
       if (tag === 'input' || tag === 'textarea' || t.isContentEditable) return true;
@@ -72,7 +75,7 @@ export class AntiDownloadDirective implements OnInit {
     // Atajos que bloqueas
     const block =
       (mod && (k === 's' || k === 'p' || k === 'u')) || // guardar, imprimir, ver código fuente
-      k === 'f12' ||                                     // devtools
+      k === 'f12' || // devtools
       (mod && e.shiftKey && (k === 'i' || k === 'c' || k === 'j')); // devtools variaciones
 
     if (block) {

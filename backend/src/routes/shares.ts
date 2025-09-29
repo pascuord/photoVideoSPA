@@ -8,9 +8,11 @@ const router = Router();
 router.post('/shares', async (req, res) => {
   try {
     const { contentType, contentId, network } = req.body || {};
-    if (!isValidContentType(contentType)) return res.status(400).json({ error: 'Invalid contentType' });
+    if (!isValidContentType(contentType))
+      return res.status(400).json({ error: 'Invalid contentType' });
     if (!isUuid(contentId)) return res.status(400).json({ error: 'Invalid contentId' });
-    if (!network || typeof network !== 'string') return res.status(400).json({ error: 'Invalid network' });
+    if (!network || typeof network !== 'string')
+      return res.status(400).json({ error: 'Invalid network' });
 
     const { error } = await supabase.rpc('increment_share', {
       p_content_type: contentType,

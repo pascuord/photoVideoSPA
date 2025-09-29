@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const url  = (import.meta as any).env.VITE_SUPABASE_URL?.trim();
+const url = (import.meta as any).env.VITE_SUPABASE_URL?.trim();
 const anon = (import.meta as any).env.VITE_SUPABASE_ANON_KEY?.trim();
 
 if (!url || !anon) {

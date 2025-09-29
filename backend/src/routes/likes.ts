@@ -11,7 +11,8 @@ router.post('/likes', async (req, res) => {
     const supabaseUser = auth.supabaseUser;
 
     const { contentType, contentId } = req.body || {};
-    if (!isValidContentType(contentType)) return res.status(400).json({ error: 'Invalid contentType' });
+    if (!isValidContentType(contentType))
+      return res.status(400).json({ error: 'Invalid contentType' });
     if (!isUuid(contentId)) return res.status(400).json({ error: 'Invalid contentId' });
 
     const userId = auth.user.id;
@@ -29,10 +30,7 @@ router.post('/likes', async (req, res) => {
 
     if (existing?.id) {
       // UNLIKE
-      const { error: delErr } = await supabaseUser
-        .from('likes')
-        .delete()
-        .eq('id', existing.id);
+      const { error: delErr } = await supabaseUser.from('likes').delete().eq('id', existing.id);
       if (delErr) throw delErr;
       return res.json({ liked: false });
     } else {

@@ -1,12 +1,11 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./out-tsc/spec",
-    "target": "es2016",
-    "types": ["node", "vitest/globals"]
+    "types": ["vitest/globals", "node"],
+    "composite": false,
+    "declaration": false,
+    "incremental": false
   },
-  "files": ["src/test-setup.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.spec.ts", "src/test-setup.ts"]
 }

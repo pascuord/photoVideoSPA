@@ -1,5 +1,11 @@
 import {
-  Directive, ElementRef, Input, OnInit, OnDestroy, inject, PLATFORM_ID,
+  Directive,
+  ElementRef,
+  Input,
+  OnInit,
+  OnDestroy,
+  inject,
+  PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 

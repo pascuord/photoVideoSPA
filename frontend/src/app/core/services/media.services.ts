@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 export class MediaService {
   private base = 'http://localhost:3000/api';
 
-  async list(type?: 'image'|'video') {
+  async list(type?: 'image' | 'video') {
     const url = new URL(`${this.base}/media`);
     if (type) url.searchParams.set('type', type);
     const res = await fetch(url);

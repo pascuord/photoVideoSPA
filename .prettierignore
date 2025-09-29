@@ -1,0 +1,6 @@
+node_modules
+dist
+out-tsc
+frontend/dist
+frontend/out-tsc
+backend/dist

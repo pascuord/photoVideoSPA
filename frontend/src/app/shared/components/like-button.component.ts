@@ -51,7 +51,7 @@ export class LikeButtonComponent implements OnInit {
   @Input() preloadStats?: StatsDto;
 
   @ViewChild('btn', { static: true }) btnRef!: ElementRef<HTMLElement>;
-  @ViewChild('fx',  { static: true }) fxRef!:  ElementRef<HTMLElement>;
+  @ViewChild('fx', { static: true }) fxRef!: ElementRef<HTMLElement>;
 
   private it = inject(InteractService);
   private router = inject(Router);
@@ -129,7 +129,13 @@ export class LikeButtonComponent implements OnInit {
       }
 
       // Confetti
-      if (!prevLiked && this.liked() && !this.reduce && isPlatformBrowser(this.platformId) && btnEl) {
+      if (
+        !prevLiked &&
+        this.liked() &&
+        !this.reduce &&
+        isPlatformBrowser(this.platformId) &&
+        btnEl
+      ) {
         this.fireConfetti(btnEl);
       }
     } catch (e) {
@@ -164,7 +170,12 @@ export class LikeButtonComponent implements OnInit {
     } as CSSStyleDeclaration);
     host.appendChild(box);
 
-    const cleanup = (anim?: any) => { try { anim?.destroy?.(); } catch {} box.remove(); };
+    const cleanup = (anim?: any) => {
+      try {
+        anim?.destroy?.();
+      } catch {}
+      box.remove();
+    };
 
     try {
       const [{ default: lottie }, { confettiData }] = await Promise.all([
@@ -182,7 +193,12 @@ export class LikeButtonComponent implements OnInit {
       });
 
       let started = false;
-      const start = () => { if (!started) { started = true; anim.goToAndPlay(0, true); } };
+      const start = () => {
+        if (!started) {
+          started = true;
+          anim.goToAndPlay(0, true);
+        }
+      };
 
       anim.addEventListener('DOMLoaded', start);
       anim.addEventListener('complete', () => cleanup(anim));

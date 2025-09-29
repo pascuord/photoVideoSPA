@@ -1,4 +1,4 @@
-export const CONTENT_TYPES = new Set(['image','video','post','song','course_module']);
+export const CONTENT_TYPES = new Set(['image', 'video', 'post', 'song', 'course_module']);
 
 export function isValidContentType(v: any): v is string {
   return typeof v === 'string' && CONTENT_TYPES.has(v);

@@ -14,8 +14,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 // import { animate } from 'motion/dom'; // Removed, use dynamic import below
 
-
-
 @Component({
   standalone: true,
   selector: 'app-header',
@@ -224,48 +222,42 @@ export class AppHeaderComponent implements AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
-  if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) return;
 
-  // Respeta accesibilidad
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) return;
+    // Respeta accesibilidad
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
 
-  // Importa Motion One solo en cliente
-  const { animate } = await import('motion');
+    // Importa Motion One solo en cliente
+    const { animate } = await import('motion');
 
-  // Aplica micro-interacciones a todos los marcados con data-press-anim
-  const pressables = this.el.nativeElement.querySelectorAll(
-    '[data-press-anim]'
-  ) as NodeListOf<HTMLElement>;
+    // Aplica micro-interacciones a todos los marcados con data-press-anim
+    const pressables = this.el.nativeElement.querySelectorAll(
+      '[data-press-anim]',
+    ) as NodeListOf<HTMLElement>;
 
-  pressables.forEach((el) => {
-    const onEnter = () =>
-      animate(el, { scale: 1.04 }, { duration: 0.18 });
+    pressables.forEach((el) => {
+      const onEnter = () => animate(el, { scale: 1.04 }, { duration: 0.18 });
 
-    const onLeave = () =>
-      animate(el, { scale: 1 }, { duration: 0.18 });
+      const onLeave = () => animate(el, { scale: 1 }, { duration: 0.18 });
 
-    const onDown = () =>
-      animate(el, { scale: 0.97 }, { duration: 0.10 });
+      const onDown = () => animate(el, { scale: 0.97 }, { duration: 0.1 });
 
-    const onUp = () =>
-      animate(el, { scale: 1.04 }, { duration: 0.16 });
+      const onUp = () => animate(el, { scale: 1.04 }, { duration: 0.16 });
 
-    el.addEventListener('mouseenter', onEnter);
-    el.addEventListener('mouseleave', onLeave);
-    el.addEventListener('pointerdown', onDown);
-    el.addEventListener('pointerup', onUp);
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mouseleave', onLeave);
+      el.addEventListener('pointerdown', onDown);
+      el.addEventListener('pointerup', onUp);
 
-    this._cleanup.push(() => {
-      el.removeEventListener('mouseenter', onEnter);
-      el.removeEventListener('mouseleave', onLeave);
-      el.removeEventListener('pointerdown', onDown);
-      el.removeEventListener('pointerup', onUp);
+      this._cleanup.push(() => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
+        el.removeEventListener('pointerdown', onDown);
+        el.removeEventListener('pointerup', onUp);
+      });
     });
-  });
-}
-
-
+  }
 
   ngOnDestroy() {
     this._cleanup.forEach((fn) => fn());

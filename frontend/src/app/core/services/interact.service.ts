@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import { apiUrl } from '../api-url'; // 👈 NUEVO
 
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL || '<YOUR_SUPABASE_URL>';
-const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '<YOUR_SUPABASE_ANON_KEY>';
+const supabaseAnonKey =
+  (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '<YOUR_SUPABASE_ANON_KEY>';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -13,7 +14,6 @@ export type StatsDto = { likes: number; comments: number; shares: number; likedB
 
 @Injectable({ providedIn: 'root' })
 export class InteractService {
-
   private async headers(requireAuth = false): Promise<Record<string, string>> {
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;

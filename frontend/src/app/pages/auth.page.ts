@@ -12,47 +12,56 @@ import { ModalComponent } from '../shared/ui/modal.component';
   standalone: true,
   imports: [CommonModule, FormsModule, ModalComponent],
   template: `
-  <section class="max-w-md mx-auto p-6">
-
-    <!-- Debug temporal -->
-    <div class="fixed bottom-2 right-2 text-xs bg-yellow-200 px-2 py-1 rounded shadow">
-      showDialog: {{ showDialog }}
-    </div>
-    <h1 class="text-2xl font-bold mb-4">Acceder</h1>
-
-    <ng-container *ngIf="auth.isLoggedIn(); else loginForm">
-      <div class="p-4 rounded bg-green-50">
-        Sesión iniciada como <strong>{{ auth.user()?.email }}</strong>.
+    <section class="max-w-md mx-auto p-6">
+      <!-- Debug temporal -->
+      <div class="fixed bottom-2 right-2 text-xs bg-yellow-200 px-2 py-1 rounded shadow">
+        showDialog: {{ showDialog }}
       </div>
-      <button class="mt-4 px-3 py-2 rounded bg-black text-white" (click)="logout()">Cerrar sesión</button>
-    </ng-container>
+      <h1 class="text-2xl font-bold mb-4">Acceder</h1>
 
-    <ng-template #loginForm>
-      <form (submit)="onSubmit($event)" class="space-y-3">
-        <input [(ngModel)]="email" name="email" type="email" required
-               placeholder="tu@email.com"
-               class="w-full border rounded px-3 py-2" />
-        <button type="submit"
-                class="px-3 py-2 rounded bg-black text-white w-full disabled:opacity-60"
-                [disabled]="isSending">
-          {{ isSending ? 'Enviando...' : 'Enviar magic link' }}
+      <ng-container *ngIf="auth.isLoggedIn(); else loginForm">
+        <div class="p-4 rounded bg-green-50">
+          Sesión iniciada como <strong>{{ auth.user()?.email }}</strong
+          >.
+        </div>
+        <button class="mt-4 px-3 py-2 rounded bg-black text-white" (click)="logout()">
+          Cerrar sesión
         </button>
-        <p class="text-xs opacity-70">Revisa tu email y abre el enlace para iniciar sesión.</p>
-      </form>
-    </ng-template>
-  </section>
+      </ng-container>
 
-  <!-- Modal genérico -->
-  <app-modal
-    [(open)]="showDialog"
-    title="Enlace enviado"
-    ariaLabel="Aviso de acceso"
-    (closed)="onModalClosed()">
-    <p class="text-sm">
-      Te envié un enlace de acceso. Revisa tu correo (incluida la carpeta de spam).
-    </p>
-  </app-modal>
+      <ng-template #loginForm>
+        <form (submit)="onSubmit($event)" class="space-y-3">
+          <input
+            [(ngModel)]="email"
+            name="email"
+            type="email"
+            required
+            placeholder="tu@email.com"
+            class="w-full border rounded px-3 py-2"
+          />
+          <button
+            type="submit"
+            class="px-3 py-2 rounded bg-black text-white w-full disabled:opacity-60"
+            [disabled]="isSending"
+          >
+            {{ isSending ? 'Enviando...' : 'Enviar magic link' }}
+          </button>
+          <p class="text-xs opacity-70">Revisa tu email y abre el enlace para iniciar sesión.</p>
+        </form>
+      </ng-template>
+    </section>
 
+    <!-- Modal genérico -->
+    <app-modal
+      [(open)]="showDialog"
+      title="Enlace enviado"
+      ariaLabel="Aviso de acceso"
+      (closed)="onModalClosed()"
+    >
+      <p class="text-sm">
+        Te envié un enlace de acceso. Revisa tu correo (incluida la carpeta de spam).
+      </p>
+    </app-modal>
   `,
 })
 export default class AuthPage implements OnDestroy {
@@ -83,7 +92,9 @@ export default class AuthPage implements OnDestroy {
     this.unsub = sub.data?.subscription?.unsubscribe;
   }
 
-  ngOnDestroy() { this.unsub?.(); }
+  ngOnDestroy() {
+    this.unsub?.();
+  }
 
   cdr = inject(ChangeDetectorRef);
 
@@ -95,10 +106,10 @@ export default class AuthPage implements OnDestroy {
       await this.auth.signInWithEmail(this.email.trim());
       // Mostrar modal en vez de alert()
       this.dialogTitle = 'Enlace enviado';
-      this.dialogMessage = 'Te envié un enlace de acceso. Revisa tu correo (incluida la carpeta de spam).';
+      this.dialogMessage =
+        'Te envié un enlace de acceso. Revisa tu correo (incluida la carpeta de spam).';
       this.showDialog = true;
       this.goHomeOnClose = true;
-      console.log('Magic link sent');
     } catch (err: any) {
       this.dialogTitle = 'No se pudo enviar el enlace';
       this.dialogMessage = err?.message || 'Ha ocurrido un error. Inténtalo de nuevo más tarde.';
@@ -110,12 +121,13 @@ export default class AuthPage implements OnDestroy {
     }
   }
 
-  async logout() { await this.auth.signOut(); }
+  async logout() {
+    await this.auth.signOut();
+  }
 
   onModalClosed() {
     if (this.goHomeOnClose) this.router.navigateByUrl('/');
     this.showDialog = false;
     this.cdr.detectChanges(); // fuerza render si estás zoneless
   }
-
 }

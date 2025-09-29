@@ -5,7 +5,5 @@ const API_BASE: string | undefined = (import.meta as any).env?.VITE_API_BASE_URL
 
 export function apiUrl(path: string) {
   if (!path.startsWith('/')) path = `/${path}`;
-  return API_BASE
-    ? `${API_BASE.replace(/\/$/, '')}/api${path}`
-    : `/backend${path}`; // solo en dev
+  return API_BASE ? `${API_BASE.replace(/\/$/, '')}/api${path}` : `/backend${path}`; // solo en dev
 }

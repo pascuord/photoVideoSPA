@@ -7,22 +7,33 @@
 @import 'swiper/css/effect-creative';
 /* autoplay no necesita CSS propio, pero mantenemos navigation/pagination */
 
-
 /* Estructura base existente */
-html, body { display:block; height:100%; }
+html,
+body {
+  display: block;
+  height: 100%;
+}
 
 /* ===== Base editorial y utilidades ===== */
 /* Nota: si usas Tailwind v3, cambia theme(colors.brand.500) por theme('colors.brand.500') */
-:root { --ring: theme('colors.green.500'); }
+:root {
+  --ring: theme('colors.green.500');
+}
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  body { @apply bg-neutral-950 text-neutral-100 antialiased; }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-neutral-950 text-neutral-100 antialiased;
+  }
 }
 
 /* Si tienes @tailwindcss/typography, invertimos la prosa en dark */
 @layer components {
-  .prose { @apply prose-invert; }
+  .prose {
+    @apply prose-invert;
+  }
 }
 
 /* Accesibilidad: anillo de foco consistente */
@@ -36,13 +47,22 @@ html, body { display:block; height:100%; }
   }
 
   /* Skeleton shimmer */
-  .skel { @apply relative overflow-hidden bg-neutral-800/60; }
-  .skel::after{
-    content:''; position:absolute; inset:0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-    transform: translateX(-100%); animation: shimmer 1.4s infinite;
+  .skel {
+    @apply relative overflow-hidden bg-neutral-800/60;
   }
-  @keyframes shimmer { 100% { transform: translateX(100%); } }
+  .skel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 1.4s infinite;
+  }
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 /* Asegura que las flechas/paginación queden por encima */
@@ -55,7 +75,7 @@ swiper-container::part(pagination) {
 /* Un poco de contraste/hover */
 swiper-container::part(button-next),
 swiper-container::part(button-prev) {
-  opacity: .9;
+  opacity: 0.9;
 }
 swiper-container::part(button-next):hover,
 swiper-container::part(button-prev):hover {
@@ -68,21 +88,25 @@ swiper-container::part(button-prev):hover {
     @apply relative inline-flex items-center gap-1 px-2 py-1
            text-white/90 transition duration-200;
   }
-  .nav-link:hover { @apply text-white; }
+  .nav-link:hover {
+    @apply text-white;
+  }
   .nav-link::after {
-    content: "";
+    content: '';
     position: absolute;
-    left: 0; right: 0; bottom: -0.35rem;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
     height: 2px;
-    background: currentColor;          /* subrayado del color del texto */
+    background: currentColor; /* subrayado del color del texto */
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform .25s ease;
-    opacity: .9;
+    transition: transform 0.25s ease;
+    opacity: 0.9;
     border-radius: 9999px;
   }
   .nav-link:hover::after,
-  .nav-link[aria-current="page"]::after {
+  .nav-link[aria-current='page']::after {
     transform: scaleX(1);
   }
 
@@ -91,4 +115,3 @@ swiper-container::part(button-prev):hover {
     @apply bg-neutral-950/70 backdrop-blur-md shadow-lg shadow-black/20 border-b border-white/10;
   }
 }
-
